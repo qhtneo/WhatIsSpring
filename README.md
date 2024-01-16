@@ -58,4 +58,9 @@
 - static import 기능을 사용하면 클래스명 없이 사용 가능
 - 테스트 툴을 먼저 만들고 구현 클래스를 만들는 걸 TDD(Test Driven Development)라고함
 ### 회원 서비스 개발
+- 서비스는 비즈니스에 의존적으로 설계 ex) join
+- 레포지터리는 기계적인 네이밍으로 설계 ex) save
+- Optional<>
+  - ifPresent : null 아닌 값이 오면 동작
+  - orElseGet : 값이 있으면 꺼내고 없으면 메서드 실행
 ### 회원 서비스 테스트
