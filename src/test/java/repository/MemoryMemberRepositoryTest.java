@@ -25,6 +25,7 @@ class MemoryMemberRepositoryTest {
 
         repository.save(member);
 
+        // Optional 값이 비어있는지 체크하는 코드
         Optional<Member> resultOption = repository.findById(member.getId());
         Assertions.assertTrue(resultOption.isPresent());
         // Optional 값을 꺼낼 때는 .get()을 사용한다.
