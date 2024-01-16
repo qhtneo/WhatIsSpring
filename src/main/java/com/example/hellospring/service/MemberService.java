@@ -1,15 +1,21 @@
 package com.example.hellospring.service;
 
 import com.example.hellospring.domain.Member;
-import com.example.hellospring.repository.MemberRepository;
+import com.example.hellospring.repository.MemoryMemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+@Service
 @RequiredArgsConstructor
 public class MemberService {
-    private final MemberRepository memberRepository;
+    private final MemoryMemberRepository memberRepository;
+
+//    public MemberService(MemoryMemberRepository memberRepository) {
+//        this.memberRepository = memberRepository;
+//    }
 
     /**
      * 회원 가입
@@ -42,4 +48,5 @@ public class MemberService {
                     throw new IllegalStateException("Already existing member.");
                 });
     }
+
 }
