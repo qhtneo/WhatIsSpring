@@ -45,6 +45,7 @@
 
 ### 회원 도메인과 레포지토리 만들기
 ### 회원 레포지토리 테스트케이스 작성
+#### 테스트 단축키 ctrl+shift+t
 - 테스트는 테스트케이스로 함(@Test)
 - 실무에서는 build 툴과 엮어서 오류 테스트케이스를 통과하지 않으면 정지
 - 모든 테스트는 메서드 순서 보장이 안됨(따로 동작하게 설계)
@@ -58,4 +59,15 @@
 - static import 기능을 사용하면 클래스명 없이 사용 가능
 - 테스트 툴을 먼저 만들고 구현 클래스를 만들는 걸 TDD(Test Driven Development)라고함
 ### 회원 서비스 개발
+- 서비스는 비즈니스에 의존적으로 설계 ex) join
+- 레포지터리는 기계적인 네이밍으로 설계 ex) save
+- Optional<>
+  - ifPresent : null 아닌 값이 오면 동작
+  - orElseGet : 값이 있으면 꺼내고 없으면 메서드 실행
+#### ctrl+alt+v는 반환 메서드 구현 단축키
+#### ctrl+alt+m은 메서드 추출 단축키
 ### 회원 서비스 테스트
+- 테스트는 과감하게 한글로 메서드명 작성 가능
+- given - when - then 문법
+- 다른 DB를 만들어서 사용할 일 없게 BeforeEach 사용 
+- 의존성 주입을 lombok 패키지의 @RequiredArgsConstructor로 대체
