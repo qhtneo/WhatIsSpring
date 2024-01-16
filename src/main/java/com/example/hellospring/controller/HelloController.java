@@ -11,11 +11,11 @@ public class HelloController {
     // 기본 html
     @GetMapping("hello")
     public String hello(Model model){
-        model.addAttribute("data","<이 부분이 데이터로 보낸곳입니다>.");
+        model.addAttribute("data","<this is data>.");
         return "hello";
     }
 
-    // 타임리프 템플릿
+    // thymeleaf 템플릿
     @GetMapping("hello-mvc")
     public String helloMvc(@RequestParam(value = "name") String name, Model model){
         model.addAttribute("name", name);
