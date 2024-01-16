@@ -45,5 +45,17 @@
 
 ### 회원 도메인과 레포지토리 만들기
 ### 회원 레포지토리 테스트케이스 작성
+- 테스트는 테스트케이스로 함(@Test)
+- 실무에서는 build 툴과 엮어서 오류 테스트케이스를 통과하지 않으면 정지
+- 모든 테스트는 메서드 순서 보장이 안됨(따로 동작하게 설계)
+- 테스트마다 데이터를 클리어 해줘야 함(afterEach())
+- Assert 로 확인 가능
+  -  Assertions
+  - org.junit.jupiter.api.Assertions
+    - assertEquals : Assertions.assertEquals(member, result);
+  - org.assertj.core.api.Assertions
+    - assertThat : Assertions.assertThat(member).isEqualTo(result);
+- static import 기능을 사용하면 클래스명 없이 사용 가능
+- 테스트 툴을 먼저 만들고 구현 클래스를 만들는 걸 TDD(Test Driven Development)라고함
 ### 회원 서비스 개발
 ### 회원 서비스 테스트
