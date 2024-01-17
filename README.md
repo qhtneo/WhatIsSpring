@@ -198,3 +198,10 @@ MemoryMemberRepository 에서  JdbcMemberRepository 로 변경
 - findByName, findAll 같은 pk 기반이 아닌 것들은 jpql 이라는 쿼리를 작성
 * 항상 트렌젝션이(@Transactional) 있어야 함(서비스 계층)
 ### 스프링 데이터 JPA
+  * 제공 기능
+  - 인터페이스를 통한 기본적인 CRUD
+  - findByName(), findByEmail() 처럼 메서드 이름만으로 조회 기능 제공
+  - 페이징 기능 자동 제공
+  - 복잡한 동적 쿼리는 Querydsl이라는 라이브러리 사용
+  - 이 조합으로 해결하기 어려운 쿼리는 JPA가 제공하는 네이티브 쿼리를 사용하거나, 
+    앞서 학습한 스프링 JdbcTemplate를 사용하면 된다.

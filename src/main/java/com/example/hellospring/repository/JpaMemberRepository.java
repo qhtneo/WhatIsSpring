@@ -4,13 +4,13 @@ import com.example.hellospring.domain.Member;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+//import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@Repository
+//@Repository
 public class JpaMemberRepository implements MemberRepository{
     private final EntityManager entityManager;
     
