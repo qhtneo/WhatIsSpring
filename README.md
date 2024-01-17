@@ -95,15 +95,48 @@
   - Setter 주입(누군가 호출했을 시 메서드가 public으로 열려있어야 함)
   
 ### 자바 코드로 직접 스프링 빈 등록하기
+```java
     @Configuration
     public class SpringConfig {
-    @Bean
-    public MemberService memberService() {
-        return new MemberService(memberRepository());
+        @Bean
+        public MemberService memberService() {
+            return new MemberService(memberRepository());
+        }
+    
+        @Bean
+        public MemberRepository memberRepository() {
+            return new MemoryMemberRepository();
+        }
     }
+```
 
-    @Bean
-    public MemberRepository memberRepository() {
-        return new MemoryMemberRepository();
+
+## 회원 관리 예제 - 웹 MVC 개발
+### 회원 웹 기능 - 홈 화면 추가
+스프링이 실행되면 스프링 컨테이너가 관련 컨트롤러가 있는지 먼저 찾고 없으면<br>
+static 파일을 찾도록 되어있음
+
+### 회원 웹 기능 - 등록
+```java
+@Controller
+    @RequiredArgsConstructor
+    public class MemberController {
+        private final MemberService memberService;
+    
+        @GetMapping("members/new")
+        public String createForm() {
+            return "members/createMemberForm";
+        }
+    
+        @PostMapping("/members/new")
+        public String create(MemberForm form) {
+            Member member = new Member();
+            member.setName(form.getName());
+    
+            memberService.join(member);
+            return "redirect:/";
+        }
     }
-}
+```
+
+### 회원 웹 기능 - 조회
