@@ -188,5 +188,13 @@ MemoryMemberRepository 에서  JdbcMemberRepository 로 변경
 - @Transactional 어노테이션을 달아주면 테스트 코드와 같은 상황에서 롤백을 시켜줌
 * byte-buddy 경고는 jdk21로 올리면서 생긴 경고
 ### 스프링 JdbcTemplate
+    - 순수 Jdbc와 동일한 환경설정을 하면 된다.
+    - 스프링 JdbcTemplate과 MyBatis 같은 라이브러리는 JDBC API에서 본 반복 코드를 
+      대부분 제거해준다. 하지만 SQL은 직접 작성해야 한다.
 ### JPA
+- JPA는 기존의 반복 코드는 물론이고, 기본적인 SQL도 JPA가 직접 만들어서 실행해준다.
+- JPA를 사용하면, SQL 데이터 중심의 설계에서 객체 중심의 설계로 패러다임을 전환을 할 수 있다.
+- JPA를 사용하면 개발 생산성을 크게 높일 수 있다.
+- findByName, findAll 같은 pk 기반이 아닌 것들은 jpql 이라는 쿼리를 작성
+* 항상 트렌젝션이(@Transactional) 있어야 함(서비스 계층)
 ### 스프링 데이터 JPA

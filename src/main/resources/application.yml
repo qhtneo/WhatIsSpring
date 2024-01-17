@@ -6,4 +6,7 @@ spring:
       org.h2.Driver
     username:
       sa
-
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none

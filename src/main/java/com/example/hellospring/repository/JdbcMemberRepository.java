@@ -3,7 +3,7 @@ package com.example.hellospring.repository;
 import com.example.hellospring.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.datasource.DataSourceUtils;
-import org.springframework.stereotype.Repository;
+//import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+//@Repository
 @RequiredArgsConstructor
-@Repository
 public class JdbcMemberRepository implements MemberRepository{
     private final DataSource dataSource;
 
