@@ -1,7 +1,7 @@
-package com.example.hellospring.service;
+package hello.hellospring.service;
 
-import com.example.hellospring.domain.Member;
-import com.example.hellospring.repository.MemoryMemberRepository;
+import hello.hellospring.domain.Member;
+import hello.hellospring.repository.MemoryMemberRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -42,6 +42,7 @@ class MemberServiceTest {
         Member findMember = resultOption.get();
         assertThat(member.getName()).isEqualTo(findMember.getName());
     }
+
     @Test
     public void 중복_회원_예외() {
         // given
@@ -67,6 +68,7 @@ class MemberServiceTest {
 
         // then
     }
+
     @Test
     void findMembers() {
     }

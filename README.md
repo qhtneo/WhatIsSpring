@@ -73,18 +73,180 @@
   - 테스트는 과감하게 한글로 메서드명 작성 가능
   - given - when - then 문법
   - 다른 DB를 만들어서 사용할 일 없게 BeforeEach 사용 
-  - 의존성 주입을 lombok 패키지의 @RequiredArgsConstructor로 대체
+  - 의존성 주입을 lombok 패키지의 @RequiredArgsConstructor 로 대체
 
 ## 스프링 빈을 등록하는 두가지 방법
   - 컴포넌트 스캔과 자동 의존관계 설정
   - 자바 코드로 직접 스프링 빈 등록하기
 
 ### 컴포넌트 스캔과 자동 의존관계 설정
-  - @Component 어노테이션이 있으면 스프링 빈으로 자동 등록이 됨
-    - 아래 어노테이션들은 @Component를 포함
+  - @Component 어노테이션이 있으면 스프링 빈으로 자동 등록이 됨<br>
+    아래 어노테이션들은 @Component 포함
     - @Controller : 외부 요청을 받음
     - @Service : 비즈니스 로직 구현
     - @Repository : 데이터를 저장
   - 하위 패키지가 아닌 패키지는 컴포넌트 스캔 안함
+
 ### DI(Dependency Injection)
-- 강의에서는 @Autowired 사용했지만 @RequiredArgsConstructor로 대체
+- 강의에서는 @Autowired 사용했지만 @RequiredArgsConstructor 로 대체
+- DI 종류
+  - 필드 주입
+  - 생성자 주입(권장)
+  - Setter 주입(누군가 호출했을 시 메서드가 public 으로 열려있어야 함)
+  
+### 자바 코드로 직접 스프링 빈 등록하기
+```java
+    @Configuration
+    public class SpringConfig {
+        @Bean
+        public MemberService memberService() {
+            return new MemberService(memberRepository());
+        }
+    
+        @Bean
+        public MemberRepository memberRepository() {
+            return new MemoryMemberRepository();
+        }
+    }
+```
+
+
+## 회원 관리 예제 - 웹 MVC 개발
+### 회원 웹 기능 - 홈 화면 추가
+스프링이 실행되면 스프링 컨테이너가 관련 컨트롤러가 있는지 먼저 찾고 없으면<br>
+static 파일을 찾도록 되어있음
+
+### 회원 웹 기능 - 등록
+```java
+@Controller
+    @RequiredArgsConstructor
+    public class MemberController {
+        private final MemberService memberService;
+    
+        @GetMapping("members/new")
+        public String createForm() {
+            return "members/createMemberForm";
+        }
+    
+        @PostMapping("/members/new")
+        public String create(MemberForm form) {
+            Member member = new Member();
+            member.setName(form.getName());
+    
+            memberService.join(member);
+            return "redirect:/";
+        }
+    }
+```
+
+### 회원 웹 기능 - 조회
+```java
+    @Controller
+    @RequiredArgsConstructor
+    public class MemberController {
+        @GetMapping("/members")
+        public String list(Model model) {
+            List<Member> members = memberService.findMembers();
+            model.addAttribute("members", members);
+            return "members/memberList";
+        }
+    }
+```
+
+## 스프링 DB 접근 기술
+### H2 데이터베이스 설치
+    개발이나 테스트 용도로 가볍고 편리한 DB, 웹 화면 제공
+- 다운로드 및 설치 https://www.h2database.com
+- h2 데이터베이스 버전은 스프링부트 버전에 맞춘다.
+- 권한 주기: chmod 755 h2.sh (윈도우 사용자는 x)
+- 실행: ./h2.sh (윈도우 사용자는 h2.bat)
+- 데이터베이스 파일 생성 방법
+  - jdbc:h2:~/test (최초 한번)
+  - ~/test.mv.db 파일 생성 확인
+  - 이후부터는 jdbc:h2:tcp://localhost/~/test 이렇게 접속
+  - 
+### 순수 JDBC
+고대의 방식
+build.gradle 파일에 jdbc, h2 데이터베이스 관련 라이브러리 추가 
+```
+implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+runtimeOnly 'com.h2database:h2'
+```
+application.properties
+```
+spring.datasource.url=jdbc:h2:tcp://localhost/~/test
+spring.datasource.driver-class-name=org.h2.Driver
+```
+임의로 yml 로 변경 application.properties -> application.yml
+
+MemoryMemberRepository 에서  JdbcMemberRepository 로 변경
+- 개방-폐쇄 원칙(OCP, Open-Closed Principle)
+    - 확장에는 열려있고, 수정, 변경에는 닫혀있다.
+- 스프링의 DI를 이용하면 기존 코드를 전혀 손대지 않고, 설정만으로 구현 클래스를 변경 할 수 있다.
+### 스프링 통합 테스트
+- 단위 테스트가 아닌 통합 테스트 시에는 @SpringBootTest
+- @Transactional 어노테이션을 달아주면 테스트 코드와 같은 상황에서 롤백을 시켜줌
+* byte-buddy 경고는 jdk21로 올리면서 생긴 경고
+### 스프링 JdbcTemplate
+    - 순수 Jdbc와 동일한 환경설정을 하면 된다.
+    - 스프링 JdbcTemplate과 MyBatis 같은 라이브러리는 JDBC API에서 본 반복 코드를 
+      대부분 제거해준다. 하지만 SQL은 직접 작성해야 한다.
+### JPA
+- JPA는 기존의 반복 코드는 물론이고, 기본적인 SQL도 JPA가 직접 만들어서 실행해준다.
+- JPA를 사용하면, SQL 데이터 중심의 설계에서 객체 중심의 설계로 패러다임을 전환을 할 수 있다.
+- JPA를 사용하면 개발 생산성을 크게 높일 수 있다.
+- findByName, findAll 같은 pk 기반이 아닌 것들은 jpql 이라는 쿼리를 작성
+* 항상 트렌젝션이(@Transactional) 있어야 함(서비스 계층)
+### 스프링 데이터 JPA
+  * 제공 기능
+  - 인터페이스를 통한 기본적인 CRUD
+  - findByName(), findByEmail() 처럼 메서드 이름만으로 조회 기능 제공
+  - 페이징 기능 자동 제공
+  - 복잡한 동적 쿼리는 Querydsl 라이브러리 사용. <br>
+    이 조합으로 해결하기 어려운 쿼리는 JPA가 제공하는 네이티브 쿼리를 사용하거나, 
+    앞서 학습한 스프링 JdbcTemplate 을 사용하면 된다.
+
+## AOP
+### AOP가 필요한 상황
+- 모든 메소드의 호출 시간을 측정하고 싶다면?
+- 공통 관심 사항(cross-cutting concern) vs 핵심 관심 사항(core concern)
+- 회원 가입 시간, 회원 조회 시간을 측정하고 싶다면?
+- 회원가입, 회원 조회에 시간을 측정하는 기능은 핵심 관심 사항이 아니다.
+
+#### 문제
+- 시간을 측정하는 로직은 공통 관심 사항이다.
+- 시간을 측정하는 로직과 핵심 비즈니스의 로직이 섞여서 유지보수가 어렵다.
+- 시간을 측정하는 로직을 별도의 공통 로직으로 만들기 매우 어렵다.
+  시간을 측정하는 로직을 변경할 때 모든 로직을 찾아가면서 변경해야 한다.
+
+### AOP 적용
+* AOP: Aspect Oriented Programming
+#### 해결
+- 회원가입, 회원 조회등 핵심 관심사항과 시간을 측정하는 공통 관심 사항을 분리한다.
+- 시간을 측정하는 로직을 별도의 공통 로직으로 만들었다.
+- 핵심 관심 사항을 깔끔하게 유지할 수 있다.
+- 변경이 필요하면 이 로직만 변경하면 된다.
+- 원하는 적용 대상을 선택할 수 있다. 
+```java
+@Aspect
+@Component
+public class TimeTraceAop {
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
+    @Around("execution(* hello.hellospring..*(..))")
+    public Object execute(ProceedingJoinPoint joinPoint) throws Throwable {
+        long start = System.currentTimeMillis();
+        log.debug("Start: {}", joinPoint.toString());
+
+        try {
+            return joinPoint.proceed();
+        } finally {
+            long finish = System.currentTimeMillis();
+            long timeMs = finish - start;
+
+            log.debug("End: {} timeMs {}ms" , joinPoint.toString(), timeMs);
+        }
+
+    }
+}
+```
