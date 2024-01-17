@@ -73,7 +73,7 @@
   - 테스트는 과감하게 한글로 메서드명 작성 가능
   - given - when - then 문법
   - 다른 DB를 만들어서 사용할 일 없게 BeforeEach 사용 
-  - 의존성 주입을 lombok 패키지의 @RequiredArgsConstructor로 대체
+  - 의존성 주입을 lombok 패키지의 @RequiredArgsConstructor 로 대체
 
 ## 스프링 빈을 등록하는 두가지 방법
   - 컴포넌트 스캔과 자동 의존관계 설정
@@ -81,18 +81,18 @@
 
 ### 컴포넌트 스캔과 자동 의존관계 설정
   - @Component 어노테이션이 있으면 스프링 빈으로 자동 등록이 됨<br>
-    아래 어노테이션들은 @Component를 포함
+    아래 어노테이션들은 @Component 포함
     - @Controller : 외부 요청을 받음
     - @Service : 비즈니스 로직 구현
     - @Repository : 데이터를 저장
   - 하위 패키지가 아닌 패키지는 컴포넌트 스캔 안함
 
 ### DI(Dependency Injection)
-- 강의에서는 @Autowired 사용했지만 @RequiredArgsConstructor로 대체
+- 강의에서는 @Autowired 사용했지만 @RequiredArgsConstructor 로 대체
 - DI 종류
   - 필드 주입
   - 생성자 주입(권장)
-  - Setter 주입(누군가 호출했을 시 메서드가 public으로 열려있어야 함)
+  - Setter 주입(누군가 호출했을 시 메서드가 public 으로 열려있어야 함)
   
 ### 자바 코드로 직접 스프링 빈 등록하기
 ```java
@@ -152,3 +152,41 @@ static 파일을 찾도록 되어있음
         }
     }
 ```
+
+## 스프링 DB 접근 기술
+### H2 데이터베이스 설치
+    개발이나 테스트 용도로 가볍고 편리한 DB, 웹 화면 제공
+- 다운로드 및 설치 https://www.h2database.com
+- h2 데이터베이스 버전은 스프링부트 버전에 맞춘다.
+- 권한 주기: chmod 755 h2.sh (윈도우 사용자는 x)
+- 실행: ./h2.sh (윈도우 사용자는 h2.bat)
+- 데이터베이스 파일 생성 방법
+  - jdbc:h2:~/test (최초 한번)
+  - ~/test.mv.db 파일 생성 확인
+  - 이후부터는 jdbc:h2:tcp://localhost/~/test 이렇게 접속
+  - 
+### 순수 JDBC
+고대의 방식
+build.gradle 파일에 jdbc, h2 데이터베이스 관련 라이브러리 추가 
+```
+implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+runtimeOnly 'com.h2database:h2'
+```
+application.properties
+```
+spring.datasource.url=jdbc:h2:tcp://localhost/~/test
+spring.datasource.driver-class-name=org.h2.Driver
+```
+임의로 yml 로 변경 application.properties -> application.yml
+
+MemoryMemberRepository 에서  JdbcMemberRepository 로 변경
+- 개방-폐쇄 원칙(OCP, Open-Closed Principle)
+    - 확장에는 열려있고, 수정, 변경에는 닫혀있다.
+- 스프링의 DI를 이용하면 기존 코드를 전혀 손대지 않고, 설정만으로 구현 클래스를 변경 할 수 있다.
+### 스프링 통합 테스트
+- 단위 테스트가 아닌 통합 테스트 시에는 @SpringBootTest
+- @Transactional 어노테이션을 달아주면 테스트 코드와 같은 상황에서 롤백을 시켜줌
+* byte-buddy 경고는 jdk21로 올리면서 생긴 경고
+### 스프링 JdbcTemplate
+### JPA
+### 스프링 데이터 JPA
