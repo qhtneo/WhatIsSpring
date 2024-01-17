@@ -10,3 +10,9 @@ spring:
     show-sql: true
     hibernate:
       ddl-auto: none
+
+logging:
+  level:
+    hello:
+      hellospring:
+        debug

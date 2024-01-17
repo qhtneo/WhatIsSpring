@@ -1,4 +1,4 @@
-package com.example.hellospring.domain;
+package hello.hellospring.domain;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

@@ -1,6 +1,6 @@
-package com.example.hellospring.repository;
+package hello.hellospring.repository;
 
-import com.example.hellospring.domain.Member;
+import hello.hellospring.domain.Member;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;

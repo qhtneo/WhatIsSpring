@@ -202,6 +202,51 @@ MemoryMemberRepository 에서  JdbcMemberRepository 로 변경
   - 인터페이스를 통한 기본적인 CRUD
   - findByName(), findByEmail() 처럼 메서드 이름만으로 조회 기능 제공
   - 페이징 기능 자동 제공
-  - 복잡한 동적 쿼리는 Querydsl이라는 라이브러리 사용
-  - 이 조합으로 해결하기 어려운 쿼리는 JPA가 제공하는 네이티브 쿼리를 사용하거나, 
-    앞서 학습한 스프링 JdbcTemplate를 사용하면 된다.
+  - 복잡한 동적 쿼리는 Querydsl 라이브러리 사용. <br>
+    이 조합으로 해결하기 어려운 쿼리는 JPA가 제공하는 네이티브 쿼리를 사용하거나, 
+    앞서 학습한 스프링 JdbcTemplate 을 사용하면 된다.
+
+## AOP
+### AOP가 필요한 상황
+- 모든 메소드의 호출 시간을 측정하고 싶다면?
+- 공통 관심 사항(cross-cutting concern) vs 핵심 관심 사항(core concern)
+- 회원 가입 시간, 회원 조회 시간을 측정하고 싶다면?
+- 회원가입, 회원 조회에 시간을 측정하는 기능은 핵심 관심 사항이 아니다.
+
+#### 문제
+- 시간을 측정하는 로직은 공통 관심 사항이다.
+- 시간을 측정하는 로직과 핵심 비즈니스의 로직이 섞여서 유지보수가 어렵다.
+- 시간을 측정하는 로직을 별도의 공통 로직으로 만들기 매우 어렵다.
+  시간을 측정하는 로직을 변경할 때 모든 로직을 찾아가면서 변경해야 한다.
+
+### AOP 적용
+* AOP: Aspect Oriented Programming
+#### 해결
+- 회원가입, 회원 조회등 핵심 관심사항과 시간을 측정하는 공통 관심 사항을 분리한다.
+- 시간을 측정하는 로직을 별도의 공통 로직으로 만들었다.
+- 핵심 관심 사항을 깔끔하게 유지할 수 있다.
+- 변경이 필요하면 이 로직만 변경하면 된다.
+- 원하는 적용 대상을 선택할 수 있다. 
+```java
+@Aspect
+@Component
+public class TimeTraceAop {
+    private final Logger log = LoggerFactory.getLogger(getClass());
+
+    @Around("execution(* hello.hellospring..*(..))")
+    public Object execute(ProceedingJoinPoint joinPoint) throws Throwable {
+        long start = System.currentTimeMillis();
+        log.debug("Start: {}", joinPoint.toString());
+
+        try {
+            return joinPoint.proceed();
+        } finally {
+            long finish = System.currentTimeMillis();
+            long timeMs = finish - start;
+
+            log.debug("End: {} timeMs {}ms" , joinPoint.toString(), timeMs);
+        }
+
+    }
+}
+```

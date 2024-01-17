@@ -1,4 +1,4 @@
-package com.example.hellospring.controller;
+package hello.hellospring.controller;
 
 import lombok.Getter;
 import lombok.Setter;

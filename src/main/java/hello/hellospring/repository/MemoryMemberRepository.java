@@ -1,6 +1,6 @@
-package com.example.hellospring.repository;
+package hello.hellospring.repository;
 
-import com.example.hellospring.domain.Member;
+import hello.hellospring.domain.Member;
 //import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;

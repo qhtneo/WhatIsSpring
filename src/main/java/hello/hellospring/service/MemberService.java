@@ -1,7 +1,7 @@
-package com.example.hellospring.service;
+package hello.hellospring.service;
 
-import com.example.hellospring.domain.Member;
-import com.example.hellospring.repository.MemberRepository;
+import hello.hellospring.domain.Member;
+import hello.hellospring.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

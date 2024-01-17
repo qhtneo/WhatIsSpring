@@ -1,6 +1,6 @@
-package com.example.hellospring.repository;
+package hello.hellospring.repository;
 
-import com.example.hellospring.domain.Member;
+import hello.hellospring.domain.Member;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

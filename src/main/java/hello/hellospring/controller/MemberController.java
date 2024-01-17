@@ -1,7 +1,7 @@
-package com.example.hellospring.controller;
+package hello.hellospring.controller;
 
-import com.example.hellospring.domain.Member;
-import com.example.hellospring.service.MemberService;
+import hello.hellospring.domain.Member;
+import hello.hellospring.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
