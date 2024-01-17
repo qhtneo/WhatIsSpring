@@ -1,7 +1,7 @@
 package com.example.hellospring.service;
 
 import com.example.hellospring.domain.Member;
-import com.example.hellospring.repository.MemoryMemberRepository;
+import com.example.hellospring.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +11,9 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class MemberService {
-    private final MemoryMemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
-//    public MemberService(MemoryMemberRepository memberRepository) {
+//    public MemberService(MemberRepository memberRepository) {
 //        this.memberRepository = memberRepository;
 //    }
 
