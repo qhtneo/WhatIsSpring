@@ -33,7 +33,7 @@
     - 데이터 : 회원ID, 이름
     - 기능 : 회원 등록, 조회
     - 아직 데이터 저장소가 선정되지 않음(가상의 시나리오)
-- 일반적인 웹 어플리케이션 계층 구조
+  - 일반적인 웹 어플리케이션 계층 구조
   - 컨트롤러 : 웹 MVC 의 컨트롤러 역할
   - 서비스 : 핵심 비즈니스 로직 구현
   - 레포지토리 : 핵심 비즈니스 로직 구현(저장소)
@@ -44,30 +44,47 @@
   - 개발을 진행하기 위해서 초기 개발 단계에서는 구현체로 가벼운 메모리 기반의 데이터 저장소 사용
 
 ### 회원 도메인과 레포지토리 만들기
+
 ### 회원 레포지토리 테스트케이스 작성
 #### 테스트 단축키 ctrl+shift+t
-- 테스트는 테스트케이스로 함(@Test)
-- 실무에서는 build 툴과 엮어서 오류 테스트케이스를 통과하지 않으면 정지
-- 모든 테스트는 메서드 순서 보장이 안됨(따로 동작하게 설계)
-- 테스트마다 데이터를 클리어 해줘야 함(afterEach())
-- Assert 로 확인 가능
-  -  Assertions
-  - org.junit.jupiter.api.Assertions
-    - assertEquals : Assertions.assertEquals(member, result);
-  - org.assertj.core.api.Assertions
-    - assertThat : Assertions.assertThat(member).isEqualTo(result);
-- static import 기능을 사용하면 클래스명 없이 사용 가능
-- 테스트 툴을 먼저 만들고 구현 클래스를 만들는 걸 TDD(Test Driven Development)라고함
+  - 테스트는 테스트케이스로 함(@Test)
+  - 실무에서는 build 툴과 엮어서 오류 테스트케이스를 통과하지 않으면 정지
+  - 모든 테스트는 메서드 순서 보장이 안됨(따로 동작하게 설계)
+  - 테스트마다 데이터를 클리어 해줘야 함(afterEach())
+  - Assert 로 확인 가능
+    -  Assertions
+    - org.junit.jupiter.api.Assertions
+      - assertEquals : Assertions.assertEquals(member, result);
+    - org.assertj.core.api.Assertions
+      - assertThat : Assertions.assertThat(member).isEqualTo(result);
+  - static import 기능을 사용하면 클래스명 없이 사용 가능
+  - 테스트 툴을 먼저 만들고 구현 클래스를 만들는 걸 TDD(Test Driven Development)라고함
+
 ### 회원 서비스 개발
-- 서비스는 비즈니스에 의존적으로 설계 ex) join
-- 레포지터리는 기계적인 네이밍으로 설계 ex) save
-- Optional<>
-  - ifPresent : null 아닌 값이 오면 동작
-  - orElseGet : 값이 있으면 꺼내고 없으면 메서드 실행
+  - 서비스는 비즈니스에 의존적으로 설계 ex) join
+  - 레포지터리는 기계적인 네이밍으로 설계 ex) save
+  - Optional<>
+    - ifPresent : null 아닌 값이 오면 동작
+    - orElseGet : 값이 있으면 꺼내고 없으면 메서드 실행
 #### ctrl+alt+v는 반환 메서드 구현 단축키
 #### ctrl+alt+m은 메서드 추출 단축키
+
 ### 회원 서비스 테스트
-- 테스트는 과감하게 한글로 메서드명 작성 가능
-- given - when - then 문법
-- 다른 DB를 만들어서 사용할 일 없게 BeforeEach 사용 
-- 의존성 주입을 lombok 패키지의 @RequiredArgsConstructor로 대체
+  - 테스트는 과감하게 한글로 메서드명 작성 가능
+  - given - when - then 문법
+  - 다른 DB를 만들어서 사용할 일 없게 BeforeEach 사용 
+  - 의존성 주입을 lombok 패키지의 @RequiredArgsConstructor로 대체
+
+## 스프링 빈을 등록하는 두가지 방법
+  - 컴포넌트 스캔과 자동 의존관계 설정
+  - 자바 코드로 직접 스프링 빈 등록하기
+
+### 컴포넌트 스캔과 자동 의존관계 설정
+  - @Component 어노테이션이 있으면 스프링 빈으로 자동 등록이 됨
+    - 아래 어노테이션들은 @Component를 포함
+    - @Controller : 외부 요청을 받음
+    - @Service : 비즈니스 로직 구현
+    - @Repository : 데이터를 저장
+  - 하위 패키지가 아닌 패키지는 컴포넌트 스캔 안함
+### DI(Dependency Injection)
+- 강의에서는 @Autowired 사용했지만 @RequiredArgsConstructor로 대체
