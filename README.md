@@ -140,3 +140,15 @@ static 파일을 찾도록 되어있음
 ```
 
 ### 회원 웹 기능 - 조회
+```java
+    @Controller
+    @RequiredArgsConstructor
+    public class MemberController {
+        @GetMapping("/members")
+        public String list(Model model) {
+            List<Member> members = memberService.findMembers();
+            model.addAttribute("members", members);
+            return "members/memberList";
+        }
+    }
+```
