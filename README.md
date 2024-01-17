@@ -80,11 +80,30 @@
   - 자바 코드로 직접 스프링 빈 등록하기
 
 ### 컴포넌트 스캔과 자동 의존관계 설정
-  - @Component 어노테이션이 있으면 스프링 빈으로 자동 등록이 됨
-    - 아래 어노테이션들은 @Component를 포함
+  - @Component 어노테이션이 있으면 스프링 빈으로 자동 등록이 됨<br>
+    아래 어노테이션들은 @Component를 포함
     - @Controller : 외부 요청을 받음
     - @Service : 비즈니스 로직 구현
     - @Repository : 데이터를 저장
   - 하위 패키지가 아닌 패키지는 컴포넌트 스캔 안함
+
 ### DI(Dependency Injection)
 - 강의에서는 @Autowired 사용했지만 @RequiredArgsConstructor로 대체
+- DI 종류
+  - 필드 주입
+  - 생성자 주입(권장)
+  - Setter 주입(누군가 호출했을 시 메서드가 public으로 열려있어야 함)
+  
+### 자바 코드로 직접 스프링 빈 등록하기
+    @Configuration
+    public class SpringConfig {
+    @Bean
+    public MemberService memberService() {
+        return new MemberService(memberRepository());
+    }
+
+    @Bean
+    public MemberRepository memberRepository() {
+        return new MemoryMemberRepository();
+    }
+}
